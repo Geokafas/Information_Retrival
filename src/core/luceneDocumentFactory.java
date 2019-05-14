@@ -55,6 +55,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -66,6 +67,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.util.Version;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.*;
 
@@ -79,60 +82,58 @@ import java.util.stream.Collectors;
 
 public class luceneDocumentFactory {
     private static StandardAnalyzer analyzer;
-    private static String indexPath = "D:\\documents\\intellijProjects\\";
+    private static String indexPath = "D:/documents/intellijProjects/luceneResults";
     private static IndexWriterConfig indexWriterConfig;
     private static Directory indexDirectory;
     private static IndexWriter indexWriter;
 
 // ftiaxnw ena index apo ena database apo polhs me  stiatoria ara kathe stiatorio tha einai document
-
-    private static void addFileToIndex(String filepath) throws java.io.IOException{
-        Path path = Paths.get(filepath);
-        File file = path.toFile();
+//TODO emfanizei 2pla
+    public void addFileToIndex(String resultSet1, ArrayList<String> resultSet2, ArrayList<String> resultSet3)
+            throws java.io.IOException, java.sql.SQLException, ParseException,NullPointerException {
         analyzer = new StandardAnalyzer();
-
-
+        System.out.println("mphka");
         indexWriterConfig = new IndexWriterConfig(analyzer);
         indexDirectory = FSDirectory.open(Paths.get(indexPath));
         indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
         Document document = new Document();
+        String[] businessToSplit = null;
+        String[] reviewsToSplit = null;
+        String[] tipsToSplit = null;
 
-        FileReader fileReader = new FileReader(file);
-        //me to .add vazw fields sto document
-        document.add(
-                new TextField("contents", fileReader));
-        document.add(
-                new StringField("path", file.getPath(), Field.Store.YES));
-        document.add(
-                new StringField("filename", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("tips_text", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("reviews_text", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("place_id", file.getName(), Field.Store.YES));
-
+            businessToSplit = resultSet1.split("\t");
+            document.add(
+                    new TextField("name", businessToSplit[1], Field.Store.YES));
+            document.add(
+                    new TextField("stars", businessToSplit[2], Field.Store.YES));
+            document.add(
+                    new TextField("categories", businessToSplit[3], Field.Store.YES));
+            document.add(
+                    new TextField("review_count", businessToSplit[4], Field.Store.YES));
+            System.out.println("resultSet1  " + businessToSplit[0] + businessToSplit[1] + businessToSplit[2] + businessToSplit[3] + businessToSplit[4]);
 
 
-        document.add(
-                new StringField("name", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("stars", file.getPath(), Field.Store.YES));
-        document.add(
-                new StringField("categories", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("review_stars", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("review_count", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("review_text", file.getName(), Field.Store.YES));
-        document.add(
-                new StringField("tip_text", file.getName(), Field.Store.YES));
+         for(String  i : resultSet2) {
+             reviewsToSplit = i.split("\t");
+            document.add(
+                    new TextField("review_stars", reviewsToSplit[0], Field.Store.YES));
+            document.add(
+                    new TextField("review_text", reviewsToSplit[1], Field.Store.YES));
+             System.out.println("resultSet2  " + reviewsToSplit[0] + reviewsToSplit[1] );
+        }
 
-
+         for(String  i : resultSet3) {
+             tipsToSplit = i.split("\t");
+            document.add(
+                    new TextField("date", tipsToSplit[0], Field.Store.YES));
+            document.add(
+                    new TextField("tip_text", tipsToSplit[1], Field.Store.YES));
+             System.out.println("resultSet3  " + tipsToSplit[0] + tipsToSplit[1] );
+        }
         //Adds a document to this index, aka indexWriter.
         indexWriter.addDocument(document);
         indexWriter.close();
+
     }
 //TODO prepei na kanw enan tokenizer gia na diavazw ta arxeia me ta esteiatoria kai na ftiaxnw 3exoristes listes gia ta reviews tips kai oti allo xreiastei
 //TODO na diavazei polla arxeia kai na epistrefei ta documents pou periexoun auth t le3h
@@ -155,20 +156,10 @@ public class luceneDocumentFactory {
     }
 
 
-    public static void test() throws java.io.IOException, org.apache.lucene.queryparser.classic.ParseException{
-
-        String dataPath = "D:\\documents\\intellijProjects\\yelpProcessed\\details_El Palenque.txt";
-        String dataPath1 = "D:\\documents\\intellijProjects\\yelpProcessed\\details_Tequila Jaxx.txt";
-        addFileToIndex(dataPath);
-        addFileToIndex(dataPath1);
-        List<Document> docs = search("contents", "pizza");
-        List<Document> docs1 = search("contents", "bar");
-        System.out.println(docs);
-        System.out.println(docs1);
+    public void test() throws java.io.IOException, org.apache.lucene.queryparser.classic.ParseException{
+        System.out.println("MPHKA???");
+        List<Document> docs = search("review_text", "pizza");
+        System.out.println("list size: "+docs.size());
+        //System.out.println(docs);
     }
-
-    public static void main(String[] args) throws java.io.IOException, org.apache.lucene.queryparser.classic.ParseException{
-        test();
-    }
-
 }

@@ -57,7 +57,7 @@ public class writeToDataBase {
                 //to executeQuery den kanei gia data Manipulation!!!! ama thelw na valw h na vgalw data apo table
                 //xrhsimopoiw to executeUpdate
 
-                String fs = String.format("INSERT INTO business \n " + "VALUES ( '%s', '%s', '%s', '%s' );",lineToColumnNEW[0],lineToColumnNEW[1],lineToColumnNEW[2],lineToColumnNEW[3]);
+                String fs = String.format("INSERT INTO business \n " + "VALUES ( '%s', '%s', '%s', '%s', '%s' );",lineToColumnNEW[0],lineToColumnNEW[1],lineToColumnNEW[2],lineToColumnNEW[3],lineToColumnNEW[4]);
                 //System.out.println(fs);
                 statement.executeUpdate(fs);
             } catch (Exception e) {

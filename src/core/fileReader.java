@@ -6,104 +6,184 @@ import java.io.*;
 import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 
 public class fileReader{
+    private static Connection connect = null;
+    private static Statement statement1;
+    private static Statement statement2;
+    private static Statement statement3;
 
-    public static void tokenize(String filepath){
-        Path path=Paths.get(filepath);
-        File file=path.toFile();
-        BufferedReader reader;
-        ArrayList<ReviewEdit> reviews;
-        ArrayList<TipEdit> tips;
+    private static ResultSet resultSet1;
+    private static ResultSet resultSet2;
+    private static ResultSet resultSet3;
+    //connection related
+    final private static String host = "localhost";
+    final private static String user = "root";
+    final private static String passwd = "";
+    private static  String tableName="";
+    private static luceneDocumentFactory fac;
+    private static ArrayList<String> businessTolucene;
+    private static ArrayList<String> reviewsTolucene;
+    private static ArrayList<String> tipsTolucene;
 
-        String line;
-        String[] lineToFields;
+
+
+
+
+    public static void readDataBase() throws NullPointerException {
+        ArrayList<BusinessDetails> array;
+        resultSet1 = null;
+        resultSet2 = null;
+        resultSet3 = null;
+        statement1 = null;
+        statement2 = null;
+        statement3 = null;
+
+        reviewsTolucene = new ArrayList<>();
+        tipsTolucene = new ArrayList<>();
+
+        fac = new luceneDocumentFactory();
         try {
-            reader = new BufferedReader(new FileReader(file));
-            line = reader.readLine();
-            reviews = new ArrayList<>();
-            tips = new ArrayList<>();
-            lineToFields = line.split("\t");
-            System.out.println("Name "+lineToFields[0]);
-            System.out.println("Stars "+lineToFields[1]);
-            System.out.println("Categories "+lineToFields[2]);
-            System.out.println("Reviews counter "+lineToFields[3]);
-            line = reader.readLine();
+            // This will load the MySQL driver, each DB has its own driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            while(line!=null){
-               // System.out.println(line);
+            // Setup the connection with the DB
+            connect = DriverManager
+                    .getConnection("jdbc:mysql://" + host + "/yelp_reviews?"
+                            + "user=" + user + "&password=" + passwd );
+            System.out.println("READY.. .. ..");
 
-                lineToFields = line.split("\t");
-                if(lineToFields[0].compareTo("review")==0){
-                    ReviewEdit rw = new ReviewEdit(Float.parseFloat(lineToFields[1]) , lineToFields[2]);
-                    reviews.add(rw);
+            // Statements allow to issue SQL queries to the database
 
+            statement1 = connect.createStatement();
 
+            resultSet1 = statement1.executeQuery("select * from business");
+            array = getBusinessDetails(resultSet1);
+            System.out.println(array.size());
 
-                }else if(lineToFields[0].compareTo("tip")==0){
-                    TipEdit te = new TipEdit(lineToFields[1] , lineToFields[2]);
-                    tips.add(te);
+           for(int i=0; i< array.size(); i++){
 
-                }
-                line = reader.readLine();
-            }
+                   String id = array.get(i).toString();
 
-            for(int i =0; i<reviews.size(); i++){
-                System.out.println(reviews.get(i).toString());
+                   //System.out.println(id);
+                   statement2 = connect.createStatement();
 
-            }
-            for(int i =0; i<tips.size(); i++) {
-                System.out.println(tips.get(i).toString());
+                   resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id+"'");
+                   while(resultSet2.next()){
+                       reviewsTolucene.add(resultSet2.getString("stars")
+                               +"\t"+resultSet2.getString("review_text"));
 
-            }
+                   }
+                   statement3 = connect.createStatement();
+                   resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id+"'");
+                   while(resultSet3.next()){
+                       tipsTolucene.add(resultSet3.getString("date")
+                               +"\t"+resultSet3.getString("tip_text"));
+                   }
+               fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
+           }
 
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args){
+    public static ArrayList<BusinessDetails> getBusinessDetails(ResultSet resultSet)  throws java.sql.SQLException{
+        ArrayList<BusinessDetails> business_array;
+        businessTolucene = new ArrayList<>();
+        business_array = new ArrayList<>();
+        BusinessDetails b;
+        while(resultSet.next()){
+            businessTolucene.add(resultSet1.getString("business_id")
+                    +"\t"+resultSet1.getString("name")
+                    +"\t"+resultSet1.getString("stars")
+                    +"\t"+resultSet1.getString("categories")
+                    +"\t"+resultSet1.getString("review_count"));
+            b = new BusinessDetails(resultSet.getString("business_id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("stars"),
+                    resultSet.getString("categories"),
+                    resultSet.getString("review_count"));
+            business_array.add(b);
+        }
+        return business_array;
 
-        tokenize("D:\\documents\\intellijProjects\\yelpProcessed\\China Buffet.txt");
+    }
 
+   public static void main(String[] args) throws NullPointerException,java.io.IOException, org.apache.lucene.queryparser.classic.ParseException {
+       readDataBase();
+       fac.test();
+       close();
+   }
+
+    private static void close() {
+        try {
+            if (resultSet1 != null) {
+                resultSet1.close();
+            }
+
+            if (resultSet2 != null) {
+                resultSet2.close();
+            }
+
+            if (resultSet3 != null) {
+                resultSet3.close();
+            }
+
+            if (statement1 != null) {
+                statement1.close();
+            }
+
+            if (statement2 != null) {
+                statement2.close();
+            }
+
+            if (statement3 != null) {
+                statement3.close();
+            }
+
+            if (connect != null) {
+                connect.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
-class ReviewEdit{
-    private float stars;
-    private String reviewText;
-    public ReviewEdit(float stars, String reviewText){
+class BusinessDetails{
+    private String id;
+    private String name;
+    private String stars;
+    private String categories;
+    private String review_counter;
+
+
+    public BusinessDetails(String id, String name, String stars, String categories, String review_counter){
+        this.id = id;
+        this.name = name;
         this.stars = stars;
-        this.reviewText = reviewText;
+        this.categories = categories;
+        this.review_counter = review_counter;
 
     }
     public String toString(){
-        return stars +" " +reviewText;
+        return id;
 
     }
+
 
 }
 
-class TipEdit{
-    private String date;
-    private String reviewText;
-    public TipEdit(String date, String reviewText){
-        this.date = date;
-        this.reviewText = reviewText;
-
-    }
-
-    public String toString(){
-        return date+" " +reviewText;
-
-    }
-
-}
 
 

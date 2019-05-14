@@ -108,7 +108,7 @@ public class DataParser {
             double stars = (double) jsonObject.get("stars");
 
             if (jsonObject.get("city").equals(city)) {
-                lineToWrite = nameOfBusiness + "\t" + stars + "\t" + categories +"\t" + review_count;
+                lineToWrite = business_id+"\t"+nameOfBusiness + "\t" + stars + "\t" + categories +"\t" + review_count;
                 //busineassData: key= name of business, value= id name stars categories review_count
                 businessData.put(nameOfBusiness, lineToWrite);
                 //businessMap: key= business_id, value= jsonObject with all the info for that id read from business.json
