@@ -9,7 +9,7 @@ import java.util.Map;
 public class fileFactory {
     //makes txt files named after the place they represent.
     // Writes in the first line:  business_id +"\t" +  nameOfBusiness + "\t" + stars + "\t" + categories +"\t" + review_count;
-  public static void createBussinessFileTXT(HashMap<String, String> businessData, HashMap<String, String> businessNameMap){
+  public void createBussinessFileTXT(HashMap<String, String> businessData, HashMap<String, String> businessNameMap){
 
       Iterator it = businessNameMap.entrySet().iterator();
 
@@ -34,7 +34,7 @@ public class fileFactory {
   }
     // appends the above files with data derived from the caller
     //it is called once for reviews and once for tips
-  public static void appendFileTXT(HashMap<String, ArrayList<String>> Map,String identifier){
+  public void appendFileTXT(HashMap<String, ArrayList<String>> Map,String identifier){
 
       Iterator<java.util.Map.Entry<java.lang.String,java.util.ArrayList<java.lang.String>>> it = Map.entrySet().iterator();
 
@@ -58,7 +58,7 @@ public class fileFactory {
       }
   }
 //identifier ?? isws kai oxi
-  private static void wordProcessing(ArrayList<String> text, PrintWriter out,String identifier)
+  private void wordProcessing(ArrayList<String> text, PrintWriter out,String identifier)
   {
       for(int i=0; i<text.size(); i++){
           out.println("\n");

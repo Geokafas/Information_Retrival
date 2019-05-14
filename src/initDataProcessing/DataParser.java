@@ -2,7 +2,6 @@ package initDataProcessing;
 
 import java.io.*;
 
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import core.luceneDocumentFactory;
 
 public class DataParser {
 
@@ -29,12 +26,15 @@ public class DataParser {
     private static String tips_file_input = "D:\\documents\\intellijProjects\\yelpRAW\\yelp\\tip.json";
 
     private static fileFactory factory;
+    private static writeToDataBase com;
 
 	
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException,Exception{
     	try {
     		String city = "Mentor-on-the-Lake";
     		factory = new fileFactory();
+            com = new writeToDataBase();
+
     		System.out.println("Starting parsing JSON file...");
         	
     		long startTime = System.nanoTime();
@@ -52,7 +52,7 @@ public class DataParser {
 		}
     }
     
-    private static void readJsonFile(String city) throws IOException, org.json.simple.parser.ParseException{
+    private static void readJsonFile(String city) throws IOException, org.json.simple.parser.ParseException,Exception{
     	System.out.println("Starting writing businesses...");
     	
     	long startTime = System.nanoTime();
@@ -85,7 +85,7 @@ public class DataParser {
     	System.out.println( "Writing Tips took: "+ totalTime3/1000000000 +"s");
     }
 
-    private static void businessJSONtoHashMap(String city) throws IOException, org.json.simple.parser.ParseException{
+    private static void businessJSONtoHashMap(String city) throws IOException, org.json.simple.parser.ParseException,Exception{
 
         BufferedReader readBusiness = new BufferedReader (new FileReader(business_file_input));
         businessMap = new HashMap <Object, JSONObject>();
@@ -122,9 +122,11 @@ public class DataParser {
         readBusiness.close();
         //call helper factory class to create business txt
         factory.createBussinessFileTXT(businessData, businessNameMap);
+        com.writeBusinessTable(businessData,businessNameMap);
+
     }
     
-	public static void reviewsJSONtoHashMap(String city, HashMap<String,String> businessNameMap) throws IOException, org.json.simple.parser.ParseException {
+	public static void reviewsJSONtoHashMap(String city, HashMap<String,String> businessNameMap) throws IOException, org.json.simple.parser.ParseException,Exception {
 
         BufferedReader readMyReviews = new BufferedReader(new FileReader(reviews_file_input));
         businessReviewMap = new HashMap<>();
@@ -147,17 +149,18 @@ public class DataParser {
             double stars = (double) jsonObject.get("stars");
 
             if (businessMap.containsKey(jsonObject.get("business_id"))) {
-                businessReviewMap.get(businessNameMap.get(business_id)).add(stars + "\t" + review_text);
-                System.out.println(businessNameMap.get(business_id) + stars + "\t" + review_text);
+                businessReviewMap.get(businessNameMap.get(business_id)).add(business_id + "\t" +stars + "\t" + review_text);
+                //System.out.println(businessNameMap.get(business_id) + stars + "\t" + review_text);
                 reviewsCounter++;
             }
         }
         System.out.println("There are " + reviewsCounter + " reviews for businesses in " + city);
         readMyReviews.close();
         factory.appendFileTXT(businessReviewMap,"review");
+        com.writeTipsAndReviewsTable(businessReviewMap,"review");
     }
     
-    public static void tipsJSONtoHashMap(String city, HashMap<String,String> businessNameMap) throws IOException, org.json.simple.parser.ParseException{
+    public static void tipsJSONtoHashMap(String city, HashMap<String,String> businessNameMap) throws IOException, org.json.simple.parser.ParseException,Exception{
 
         BufferedReader readMyTips = new BufferedReader (new FileReader(tips_file_input));
     	businessTipsMap = new HashMap <>();
@@ -171,7 +174,6 @@ public class DataParser {
         }
     	
     	int tips_counter = 0;
-    	
     	while ((cLine= readMyTips.readLine())!=null) {
             Object obj = parser.parse((cLine));
             jsonObject = (JSONObject) obj;
@@ -181,7 +183,7 @@ public class DataParser {
 
     		
     		if (businessMap.containsKey(jsonObject.get("business_id"))) {
-                businessTipsMap.get(businessNameMap.get(business_id)).add(date + "\t" + tip_text);
+                businessTipsMap.get(businessNameMap.get(business_id)).add(business_id + "\t" +date + "\t" + tip_text);
     			tips_counter++;
 				
     		}
@@ -189,5 +191,7 @@ public class DataParser {
     	System.out.println("There are "+tips_counter +" tips for businesses in " + city);
     	readMyTips.close();
     	factory.appendFileTXT(businessTipsMap,"tip");
+        com.writeTipsAndReviewsTable(businessTipsMap,"tip");
+        com.closeDataBaseConnection();
     }
 }
