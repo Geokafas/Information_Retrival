@@ -1,23 +1,12 @@
 package core;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
-import java.io.*;
-import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.DriverManager;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
 
-public class fileReader{
+public class dataBaseReader{
     private static Connection connect = null;
     private static Statement statement1;
     private static Statement statement2;
@@ -73,26 +62,29 @@ public class fileReader{
 
            for(int i=0; i< array.size(); i++){
 
-                   String id = array.get(i).toString();
+               String id = array.get(i).toString();
+               //clean arrays before assigning. Because the
+               // same array is used to send data for each different business to lucene
+               reviewsTolucene.clear();
+               tipsTolucene.clear();
 
-                   //System.out.println(id);
-                   statement2 = connect.createStatement();
+               //System.out.println(id);
+               statement2 = connect.createStatement();
+               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id+"'");
+               while(resultSet2.next()){
+                   reviewsTolucene.add(resultSet2.getString("stars")
+                           +"\t"+resultSet2.getString("review_text"));
 
-                   resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id+"'");
-                   while(resultSet2.next()){
-                       reviewsTolucene.add(resultSet2.getString("stars")
-                               +"\t"+resultSet2.getString("review_text"));
-
-                   }
-                   statement3 = connect.createStatement();
-                   resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id+"'");
-                   while(resultSet3.next()){
-                       tipsTolucene.add(resultSet3.getString("date")
-                               +"\t"+resultSet3.getString("tip_text"));
-                   }
-               fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
+               }
+               statement3 = connect.createStatement();
+               resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id+"'");
+               while(resultSet3.next()){
+                   tipsTolucene.add(resultSet3.getString("date")
+                           +"\t"+resultSet3.getString("tip_text"));
+               }
+           fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
            }
-
+        //There was a problem connecting to the database
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,7 +114,6 @@ public class fileReader{
 
    public static void main(String[] args) throws NullPointerException,java.io.IOException, org.apache.lucene.queryparser.classic.ParseException {
        readDataBase();
-       fac.test();
        close();
    }
 
@@ -160,7 +151,7 @@ public class fileReader{
         }
     }
 }
-
+//currently not fully used
 class BusinessDetails{
     private String id;
     private String name;

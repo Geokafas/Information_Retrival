@@ -1,14 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GUI.CoreWindowController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane id="main_anchore" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.coreWindowController">
+   <children>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="919.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-19.0" AnchorPane.topAnchor="0.0">
+         <center>
+          <AnchorPane id="left_anchore" minHeight="-Infinity" minWidth="-Infinity" prefHeight="461.0" prefWidth="620.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <ScrollPane id="result_presenter_pane" fitToHeight="true" fitToWidth="true" layoutX="-1.0" layoutY="-1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="641.0" style="-fx-border-insets: 50px; -fx-border-radius: 50px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                      <AnchorPane id="result_anchore" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="620.0">
+                           <children>
+                              <ListView id="search_results_listView" fx:id="searchView" editable="true" layoutY="-8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="461.0" prefWidth="620.0" style="-fx-border-color: #FFFAF0; -fx-background-color: #FFFAF0;" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-8.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </ListView>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="118.0" prefWidth="900.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox id="search_searchbtn_Hbox" prefHeight="120.0" prefWidth="854.0">
+                     <children>
+                        <AnchorPane id="search_anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="115.0" prefWidth="646.0">
+                           <children>
+                              <TextField id="search_textField" fx:id="searchField" cache="true" layoutX="10.0" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="52.0" prefWidth="624.0" promptText="search terms" style="-fx-border-insets: 5px; -fx-border-radius: 5px; -fx-border-color: #778899; -fx-background-color: #FFFAF0;" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="32.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <effect>
+                                    <Glow />
+                                 </effect>
+                              </TextField>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="searchBTN_anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="115.0" prefWidth="250.0">
+                           <children>
+                              <Button id="search_btn" fx:id="search_btn" layoutX="74.0" layoutY="33.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="49.0" prefWidth="102.0" style="-fx-background-color: #FFFAF0; -fx-background-insets: 4; -fx-border-color: #708090; -fx-border-width: 2; -fx-border-insets: 2;" text="search" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="74.0" AnchorPane.rightAnchor="74.0" AnchorPane.topAnchor="33.0">
+                                 <font>
+                                    <Font name="Calibri Bold Italic" size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </top>
+         <right>
+          <AnchorPane id="right_anchore" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="279.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox id="filters_Vbox" layoutY="65.0" prefHeight="440.0" prefWidth="265.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane id="filter_anchorePane" prefHeight="120.0" prefWidth="265.0">
+                           <children>
+                              <CheckBox layoutX="14.0" layoutY="95.0" mnemonicParsing="false" text="Select All" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="156.0" AnchorPane.topAnchor="95.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <Label layoutX="14.0" layoutY="36.0" text="Filters:" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="36.0">
+                                 <font>
+                                    <Font name="Calibri Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="chebox_anchorPane" prefHeight="456.0" prefWidth="252.0">
+                           <children>
+                              <CheckBox id="chbx_1" fx:id="chbx_name" layoutX="14.0" layoutY="54.0" mnemonicParsing="false" onAction="#searchActionHandler" text="Name:" AnchorPane.bottomAnchor="336.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="172.0" AnchorPane.topAnchor="54.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_2" fx:id="chbx_stars" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="72.0" text="Stars:" AnchorPane.bottomAnchor="290.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="100.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_3" fx:id="chbx_categories" layoutX="14.0" layoutY="140.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="100.0" text="Categories:" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="138.0" AnchorPane.topAnchor="140.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_4" fx:id="chbx_reviewStars" layoutX="14.0" layoutY="185.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="107.0" text="Review Stars:" AnchorPane.bottomAnchor="205.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="185.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_5" fx:id="chbx_reviouCount" layoutX="14.0" layoutY="237.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="117.0" text="Review Count:" AnchorPane.bottomAnchor="153.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="237.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_6" fx:id="chbx_reviewText" layoutX="14.0" layoutY="282.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="107.0" text="Review Text:" AnchorPane.bottomAnchor="108.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="282.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                              <CheckBox id="chbx_7" fx:id="chbx_tipText" layoutX="14.0" layoutY="328.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="20.0" prefWidth="82.0" text="Tip Text:" AnchorPane.bottomAnchor="62.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="156.0" AnchorPane.topAnchor="328.0">
+                                 <font>
+                                    <Font name="Calibri Italic" size="14.0" />
+                                 </font>
+                              </CheckBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </right>
+         <bottom>
+            <AnchorPane prefHeight="5.0" prefWidth="919.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER" />
+         </bottom>
+         <left>
+            <AnchorPane prefHeight="477.0" prefWidth="7.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+   </children>
 </AnchorPane>

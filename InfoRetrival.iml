@@ -15,6 +15,6 @@
     <orderEntry type="library" exported="" name="analysis" level="project" />
     <orderEntry type="library" exported="" name="lucene-queries-8.0.0" level="project" />
     <orderEntry type="library" exported="" name="mysql-connector-java-8.0" level="project" />
-    <orderEntry type="library" name="javafx-swt" level="application" />
+    <orderEntry type="library" exported="" name="javafx-swt" level="project" />
   </component>
 </module>
