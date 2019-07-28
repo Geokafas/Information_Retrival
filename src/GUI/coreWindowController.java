@@ -1,63 +1,70 @@
 package GUI;
 
-import com.sun.javafx.tk.Toolkit;
+import com.jfoenix.controls.*;
+
 import core.luceneSearchEngine;
-import javafx.application.Platform;
+
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
+
 import org.apache.lucene.document.Document;
-import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexReader;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.concurrent.*;
 
 public class coreWindowController{
     private luceneSearchEngine lucene = new luceneSearchEngine();
+    private static IndexReader indexReader;
     @FXML
-    private Button search_btn ;
+    private JFXButton search_btn ;
 
     @FXML
-    private TextField searchField;
+    private JFXTextField searchField;
 
     @FXML
-    private ListView<Document> searchView;
+    private JFXListView<String> searchView;
     @FXML
-    private CheckBox chbx_name;
+    private JFXCheckBox chbx_name;
     @FXML
-    private CheckBox chbx_stars;
+    private JFXCheckBox chbx_stars;
     @FXML
-    private CheckBox chbx_categories;
+    private JFXCheckBox chbx_categories;
     @FXML
-    private CheckBox chbx_reviewStars;
+    private JFXCheckBox chbx_reviewStars;
     @FXML
-    private CheckBox chbx_reviewCount;
+    private JFXCheckBox chbx_reviewCount;
     @FXML
-    private CheckBox chbx_reviewText;
+    private JFXCheckBox chbx_reviewText;
     @FXML
-    private CheckBox chbx_tipText;
+    private JFXCheckBox chbx_tipText;
 
     private static String searchTerms;
     private ObservableList<Document> results = FXCollections.observableArrayList();
-    private ArrayList<String> searchFields;
+    private ArrayList<String> searchFields = new ArrayList<>(Arrays.asList("categories"));
+
+    public coreWindowController(){}
 
     //auth kaleitai apo to FXML arxeio sthn onAction
     @FXML
-    protected void searchActionHandler(ActionEvent event)
+    protected void searchActionHandler(ActionEvent event) throws IOException
     {
+        //TODO exoun thema lg ta checkboxes. Den dilonentai kathe fora
         if (event.getSource() == search_btn)
         {
             searchTerms = searchField.getText();
             System.out.println("search Terms: " + searchTerms);
-            //if no fiels is selected then default to reviewText
-            if(searchFields.isEmpty()){
-                searchFields.add("review_text");
-            }
+
             luceneSearch(searchFields, searchTerms);
             searchField.setText(""); //clear field
         }else{
@@ -67,25 +74,55 @@ public class coreWindowController{
 
 
     //TODO na valw asterakia san eikonidio aristera kai na taxinomo me vash ta stars. Alla tha prepei na alla3w to ObservableList se kt allo.
-    private void populateSearchResultsTreeView(List<Document> docs) {
-        results.addAll(docs);
-        searchView.setItems(results);
+    private void populateSearchResultsListView(List<Document> docs) {
+
+        if(!searchView.getItems().isEmpty()){cleanListView();}
+
+        for(int i=0; i<docs.size(); i++) {
+            Document d = docs.get(i);
+            searchView.getItems().add(constructMessages(d));
+        }
     }
 
+    private String constructMessages(Document d){
+        String name = d.get("name");
+        String stars = d.get("stars");
+
+        String listViewMessage = stars + ' ' + name;
+
+        return listViewMessage;
+    }
 
     //TODO prepei h anazhthsh na sundiazei ta queries ama einai panw apo ena
-    private void luceneSearch(ArrayList<String> inField, String searchTerms){
-        Task task = new Task(){
+    //TODO na se allo packet
+    private void luceneSearch(ArrayList<String> inField, String searchTerms) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+
+        Future<List<Document>> future = executor.submit(new Callable<List<Document>>() {
             @Override
-            protected Object call() throws Exception {
+            public List<Document> call() throws Exception {
+
                 System.out.println("mphka");
-                List<Document> docs = lucene.search(inField.get(0),searchTerms);
-                System.out.println(docs);
-                populateSearchResultsTreeView(docs);
-                return null;
+                List<Document> docs = lucene.search(inField,searchTerms);
+                for(int i=0; i<docs.size();++i)
+                {
+                    System.out.println(docs.get(i).get("name"));
+                }
+                return docs;
             }
-        };
-        new Thread(task).start();
+        });
+        executor.shutdown();
+        try {
+                populateSearchResultsListView(future.get());
+            //System.out.println("result is: " + future.get());
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+    }
+
+    private void cleanListView() {
+        searchView.getItems().setAll();
     }
 
     private ArrayList<String> getCheckBoxValues(ActionEvent value){
@@ -94,22 +131,22 @@ public class coreWindowController{
             values.add("name");
             System.out.println(value);
         }else if(value.getSource() == chbx_stars) {
-            values.add("name");
+            values.add("stars");
             System.out.println(value);
         }else if(value.getSource() == chbx_categories) {
-            values.add("name");
+            values.add("categories");
             System.out.println(value);
         }else if(value.getSource() == chbx_reviewStars) {
-            values.add("name");
+            values.add("review_stars");
             System.out.println(value);
         }else if(value.getSource() == chbx_reviewCount) {
-            values.add("name");
+            values.add("review_count");
             System.out.println(value);
         }else if(value.getSource() == chbx_reviewText) {
-            values.add("name");
+            values.add("review_text");
             System.out.println(value);
         }else if(value.getSource() == chbx_tipText) {
-            values.add("name");
+            values.add("tip_text");
             System.out.println(value);
         }
         return values;

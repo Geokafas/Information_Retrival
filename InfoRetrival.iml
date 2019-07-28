@@ -16,5 +16,14 @@
     <orderEntry type="library" exported="" name="lucene-queries-8.0.0" level="project" />
     <orderEntry type="library" exported="" name="mysql-connector-java-8.0" level="project" />
     <orderEntry type="library" exported="" name="javafx-swt" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/Program Files (x86)/Oracle/jfoenix-9.0.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

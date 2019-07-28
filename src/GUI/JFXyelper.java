@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
 
@@ -14,20 +15,26 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
+
 public class JFXyelper extends Application {
-
-
+    private AnchorPane coreWindowLayout;
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("coreWindow.fxml"));
+        coreWindowLayout = fxmlLoader.load();
 
-        Parent root1 = fxmlLoader.load();
+        // Give the controller access to the main application
+        coreWindowController controller = fxmlLoader.getController();
 
-        stage.setMinHeight(700);
-        stage.setMinWidth(919);
-        stage.setTitle("test test dokimi");
-        stage.setScene(new Scene(root1));
-        stage.show();
+        // Show the scene containing the coreWindow layout
+
+        primaryStage.setMinHeight(700);
+        primaryStage.setMinWidth(919);
+        primaryStage.setTitle("test test dokimi");
+        primaryStage.setScene(new Scene(coreWindowLayout));
+        primaryStage.show();
     }
 
     public static void main(String[] args)  {

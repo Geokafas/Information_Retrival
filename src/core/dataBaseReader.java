@@ -1,5 +1,6 @@
 package core;
 
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -29,7 +30,7 @@ public class dataBaseReader{
 
 
 
-    public static void readDataBase() throws NullPointerException {
+    public static void readDataBase() throws NullPointerException, IOException {
         ArrayList<BusinessDetails> array;
         resultSet1 = null;
         resultSet2 = null;
@@ -42,6 +43,7 @@ public class dataBaseReader{
         tipsTolucene = new ArrayList<>();
 
         fac = new luceneDocumentFactory();
+        fac.initialize();
         try {
             // This will load the MySQL driver, each DB has its own driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -82,8 +84,9 @@ public class dataBaseReader{
                    tipsTolucene.add(resultSet3.getString("date")
                            +"\t"+resultSet3.getString("tip_text"));
                }
-           fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
+               fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
            }
+           fac.terminate();
         //There was a problem connecting to the database
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,9 +115,10 @@ public class dataBaseReader{
 
     }
 
-   public static void main(String[] args) throws NullPointerException,java.io.IOException, org.apache.lucene.queryparser.classic.ParseException {
-       readDataBase();
-       close();
+   public static void main(String[] args) throws NullPointerException,java.io.IOException {
+        //TODO prin treksw thn readDB prepei na tsekarw to fakelo luceneResults. An den einai adeios prepei na ton adiasw gt meta tha m efanizei diplwtupa apotelesmata sta queries mou
+        readDataBase();
+        close();
    }
 
     private static void close() {

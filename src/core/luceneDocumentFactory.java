@@ -57,6 +57,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.document.Document;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
@@ -69,13 +70,16 @@ public class luceneDocumentFactory {
     private static IndexWriter indexWriter;
 
 // ftiaxnw ena index apo ena database apo polhs me  stiatoria ara kathe stiatorio tha einai document
-//TODO emfanizei 2pla
-    public void addFileToIndex(String resultSet1, ArrayList<String> resultSet2, ArrayList<String> resultSet3)
-            throws java.io.IOException, java.sql.SQLException, ParseException,NullPointerException {
+    public void initialize() throws IOException {
         analyzer = new StandardAnalyzer();
         indexWriterConfig = new IndexWriterConfig(analyzer);
-        indexDirectory = FSDirectory.open(Paths.get(indexPath));
+        indexDirectory = FSDirectory.open(Paths.get(indexPath)); //file system directory takes a path as an argument
         indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
+    }
+
+    public void addFileToIndex(String resultSet1, ArrayList<String> resultSet2, ArrayList<String> resultSet3)
+            throws java.io.IOException, NullPointerException {
+
 
         Document document = new Document();
         String[] businessToSplit;
@@ -86,19 +90,19 @@ public class luceneDocumentFactory {
         businessToSplit = resultSet1.split("\t");
         System.out.println("FOR ID:  " + businessToSplit[0]);
         document.add(
-                new TextField("name", businessToSplit[1], Field.Store.YES));
+                new TextField("name", businessToSplit[1], Field.Store.YES));//use textfield for content i want to be tokenized
         document.add(
-                new TextField("stars", businessToSplit[2], Field.Store.YES));
+                new StringField("stars", businessToSplit[2], Field.Store.YES)); //use StringField for content i dont want to be tokenized
         document.add(
                 new TextField("categories", businessToSplit[3], Field.Store.YES));
         document.add(
-                new TextField("review_count", businessToSplit[4], Field.Store.YES));
+                new StringField("review_count", businessToSplit[4], Field.Store.YES));
         //System.out.println("resultSet1  " + businessToSplit[0] + businessToSplit[1] + businessToSplit[2] + businessToSplit[3] + businessToSplit[4]);
 
         for(String  i : resultSet2) {
             reviewsToSplit = i.split("\t");
             document.add(
-                    new TextField("review_stars", reviewsToSplit[0], Field.Store.YES));
+                    new StringField("review_stars", reviewsToSplit[0], Field.Store.YES));
             document.add(
                     new TextField("review_text", reviewsToSplit[1], Field.Store.YES));
             System.out.println("resultSet2  "+"\t"+ reviewsToSplit[0] +"\t"+ reviewsToSplit[1]);
@@ -107,14 +111,16 @@ public class luceneDocumentFactory {
         for(String  i : resultSet3) {
             tipsToSplit = i.split("\t");
             document.add(
-                    new TextField("date", tipsToSplit[0], Field.Store.YES));
+                    new StringField("date", tipsToSplit[0], Field.Store.YES));
             document.add(
                     new TextField("tip_text", tipsToSplit[1], Field.Store.YES));
             //System.out.println("resultSet3  " + tipsToSplit[0] + tipsToSplit[1] );
         }
         //Adds a document to this index, aka indexWriter.
         indexWriter.addDocument(document);
-        indexWriter.close();
 
     }
+
+    public void terminate() throws IOException {indexWriter.close();}
+
 }
