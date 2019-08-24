@@ -21,7 +21,7 @@ public class dataBaseReader{
     final private static String user = "root";
     final private static String passwd = "";
     private static  String tableName="";
-    private static luceneDocumentFactory fac;
+    private static luceneIndexer fac;
     private static ArrayList<String> businessTolucene;
     private static ArrayList<String> reviewsTolucene;
     private static ArrayList<String> tipsTolucene;
@@ -42,7 +42,7 @@ public class dataBaseReader{
         reviewsTolucene = new ArrayList<>();
         tipsTolucene = new ArrayList<>();
 
-        fac = new luceneDocumentFactory();
+        fac = new luceneIndexer();
         fac.initialize();
         try {
             // This will load the MySQL driver, each DB has its own driver

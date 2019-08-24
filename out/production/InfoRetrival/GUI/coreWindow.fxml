@@ -18,7 +18,7 @@
          <center>
           <AnchorPane id="left_anchore" SplitPane.resizableWithParent="false">
                <children>
-                  <ListView id="searchView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="477.0" prefWidth="902.0" style="-fx-border-color: #FFFAF0; -fx-background-color: #FFFAF0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ListView fx:id="searchView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="477.0" prefWidth="902.0" style="-fx-border-color: #FFFAF0; -fx-background-color: #FFFAF0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

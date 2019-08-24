@@ -62,14 +62,14 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 
-public class luceneDocumentFactory {
-    private static StandardAnalyzer analyzer;
-    private static String indexPath = "D:/documents/intellijProjects/luceneResults";
-    private static IndexWriterConfig indexWriterConfig;
-    private static Directory indexDirectory;
-    private static IndexWriter indexWriter;
+public class luceneIndexer {
+    private StandardAnalyzer analyzer;
+    private String indexPath = "D:/documents/intellijProjects/luceneResults";
+    private IndexWriterConfig indexWriterConfig;
+    private Directory indexDirectory;
+    private IndexWriter indexWriter;
 
-// ftiaxnw ena index apo ena database apo polhs me  stiatoria ara kathe stiatorio tha einai document
+// ftiaxnw ena index apo ena database apo polhs me  stiatoria ara kathe estiatorio tha einai document
     public void initialize() throws IOException {
         analyzer = new StandardAnalyzer();
         indexWriterConfig = new IndexWriterConfig(analyzer);
