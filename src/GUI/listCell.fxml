@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox id="cell" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane style="-fx-background-color: #373F51;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXTextField id="cellTitle" prefHeight="67.0" prefWidth="600.0" />
-      <JFXTextArea id="cellReviewText" />
-      <JFXTextArea id="cellTipText" />
+      <VBox id="cell" fx:id="cell" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="30.0" style="-fx-background-color: #373F51;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXTextField id="cellTitle" fx:id="cellTitle" alignment="CENTER" editable="false" promptText="title" style="-fx-background-color: #373F51; -fx-text-inner-color: #D6EDFF;" unFocusColor="#d6edff">
+               <font>
+                  <Font name="DejaVu Sans" size="24.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextArea id="cellReviewText" fx:id="cellReviewText" editable="false" promptText="This listing has not a review" style="-fx-background-color: #373F51; -fx-text-inner-color: #D6EDFF;" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextArea>
+            <JFXTextArea id="cellTipText" fx:id="cellTipText" editable="false" prefHeight="80.0" prefWidth="675.0" promptText="This listing has not a tip" style="-fx-background-color: #373F51; -fx-text-inner-color: #D6EDFF;" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXTextArea>
+         </children>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

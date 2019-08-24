@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
-public class coreWindowController implements Initializable {
+public class coreWindowController {
     private luceneSearchEngine lucene = new luceneSearchEngine();
     private static IndexReader indexReader;
     @FXML
@@ -62,21 +62,13 @@ public class coreWindowController implements Initializable {
 
     //TODO na valw asterakia san eikonidio aristera kai na taxinomo me vash ta stars. Alla tha prepei na alla3w to ObservableList se kt allo.
     private void populateSearchResultsListView(List<Document> docs) {
-
-        //if(!searchView.getItems().isEmpty()){cleanListView();}
+        //to obervableList kapws sundeete me to listview kai mporw na ftiaxnw ena tetio antikeimeno kai na to kanw set sto serchView list
+        
         storeObservableList = FXCollections.observableArrayList();
-        for(int i=0; i<docs.size(); i++) {
-            Document d = docs.get(i);
-            String name = d.get("name");
-            int stars = Integer.valueOf(d.get("stars"));
-            String review_text = d.get("review_text");
-            String tip_text = d.get("tip_text");
-            System.out.println("Name: " + name + " stars: " + stars);
-            storeObservableList.add(new Store(name,review_text,tip_text,stars));
-            searchView.setItems(storeObservableList);
-            //searchView.setCellFactory(storeListView -> new StoreListViewCell());
-            //searchView.getItems().add(VBox);
-        }
+        storeObservableList.addAll(createList(docs));
+
+        searchView.setItems(storeObservableList);
+        searchView.setCellFactory(storeListView -> new StoreListViewCell());
     }
 
 
@@ -102,7 +94,7 @@ public class coreWindowController implements Initializable {
         });
         executor.shutdown();
         try {
-                populateSearchResultsListView(future.get());
+            populateSearchResultsListView(future.get());
             //System.out.println("result is: " + future.get());
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -110,11 +102,18 @@ public class coreWindowController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        System.out.println("INITIALIZED");
-//        searchView.setItems(storeObservableList);
-        searchView.setCellFactory(storeListView -> new StoreListViewCell());
+    private ArrayList<Store> createList(List<Document> docs){
+        ArrayList<Store> stores = new ArrayList<Store>();
+        for(int i=0; i<docs.size(); i++) {
+            Document d = docs.get(i);
+            String name = d.get("name");
+            int stars = Integer.valueOf(d.get("stars"));
+            String review_text = d.get("review_text");
+            String tip_text = d.get("tip_text");
+            System.out.println("Name: " + name + " stars: " + stars);
+            stores.add(new Store(name,review_text,tip_text,stars));
+        }
+        return stores;
     }
 
     private void cleanListView() {

@@ -63,15 +63,6 @@
                </children>
             </AnchorPane>
          </top>
-         <right>
-          <AnchorPane id="right_anchore" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="10.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER" />
-         </right>
-         <bottom>
-            <AnchorPane prefHeight="5.0" prefWidth="919.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER" />
-         </bottom>
-         <left>
-            <AnchorPane prefHeight="477.0" prefWidth="7.0" style="-fx-background-color: #708090;" BorderPane.alignment="CENTER" />
-         </left>
       </BorderPane>
    </children>
 </AnchorPane>
