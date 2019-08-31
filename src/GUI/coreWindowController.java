@@ -46,7 +46,7 @@ public class coreWindowController {
         searchFields.add("name");
         searchFields.add("review_text");
         searchFields.add("tip_text");
-        searchFields.add("categories");
+//        searchFields.add("categories");
 
         if (event.getSource() == search_btn)
         {
@@ -63,7 +63,11 @@ public class coreWindowController {
     //TODO na valw asterakia san eikonidio aristera kai na taxinomo me vash ta stars. Alla tha prepei na alla3w to ObservableList se kt allo.
     private void populateSearchResultsListView(List<Document> docs) {
         //to obervableList kapws sundeete me to listview kai mporw na ftiaxnw ena tetio antikeimeno kai na to kanw set sto serchView list
-        
+
+        if (!searchView.getItems().isEmpty()) {
+            cleanListView();
+        }
+
         storeObservableList = FXCollections.observableArrayList();
         storeObservableList.addAll(createList(docs));
 
@@ -78,16 +82,16 @@ public class coreWindowController {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         //called from a different thread so the system wont be unresponsive
-
         Future<List<Document>> future = executor.submit(new Callable<List<Document>>() {
             @Override
             public List<Document> call() throws Exception {
 
-                System.out.println("mphka");
+                //System.out.println("mphka");
                 List<Document> docs = lucene.search(inField,searchTerms);
                 for(int i=0; i<docs.size();++i)
                 {
-                    System.out.println(docs.get(i).get("name"));
+                    //System.out.println(docs.get(i).get("name"));
+                    //System.out.println(docs.get(i).get("review_text"));
                 }
                 return docs;
             }
@@ -98,8 +102,7 @@ public class coreWindowController {
             //System.out.println("result is: " + future.get());
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
-            }
-
+        }
     }
 
     private ArrayList<Store> createList(List<Document> docs){

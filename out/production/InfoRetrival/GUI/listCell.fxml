@@ -22,7 +22,7 @@
                   <Font size="18.0" />
                </font>
             </JFXTextArea>
-            <JFXTextArea id="cellTipText" fx:id="cellTipText" editable="false" prefHeight="52.0" prefWidth="675.0" promptText="This listing has not a tip" style="-fx-background-color: #373F51; -fx-text-inner-color: #D6EDFF;" wrapText="true">
+            <JFXTextArea id="cellTipText" fx:id="cellTipText" editable="false" prefHeight="80.0" prefWidth="675.0" promptText="This listing has not a tip" style="-fx-background-color: #373F51; -fx-text-inner-color: #D6EDFF;" wrapText="true">
                <font>
                   <Font size="18.0" />
                </font>

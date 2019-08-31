@@ -32,7 +32,7 @@ public class JFXyelper extends Application {
 
         primaryStage.setMinHeight(700);
         primaryStage.setMinWidth(919);
-        primaryStage.setTitle("test test dokimi");
+        primaryStage.setTitle("Yelpme");
         primaryStage.setScene(new Scene(coreWindowLayout));
         primaryStage.show();
     }

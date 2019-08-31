@@ -90,6 +90,8 @@ public class luceneIndexer {
         businessToSplit = resultSet1.split("\t");
         System.out.println("FOR ID:  " + businessToSplit[0]);
         document.add(
+                new StringField("business_id", businessToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
+        document.add(
                 new TextField("name", businessToSplit[1], Field.Store.YES));//use textfield for content i want to be tokenized
         document.add(
                 new StringField("stars", businessToSplit[2], Field.Store.YES)); //use StringField for content i dont want to be tokenized
@@ -102,18 +104,22 @@ public class luceneIndexer {
         for(String  i : resultSet2) {
             reviewsToSplit = i.split("\t");
             document.add(
-                    new StringField("review_stars", reviewsToSplit[0], Field.Store.YES));
+                    new StringField("business_id", reviewsToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
             document.add(
-                    new TextField("review_text", reviewsToSplit[1], Field.Store.YES));
+                    new StringField("review_stars", reviewsToSplit[1], Field.Store.YES));
+            document.add(
+                    new TextField("review_text", reviewsToSplit[2], Field.Store.YES));
             System.out.println("resultSet2  "+"\t"+ reviewsToSplit[0] +"\t"+ reviewsToSplit[1]);
         }
 
         for(String  i : resultSet3) {
             tipsToSplit = i.split("\t");
             document.add(
-                    new StringField("date", tipsToSplit[0], Field.Store.YES));
+                    new StringField("business_id", tipsToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
             document.add(
-                    new TextField("tip_text", tipsToSplit[1], Field.Store.YES));
+                    new StringField("date", tipsToSplit[1], Field.Store.YES));
+            document.add(
+                    new TextField("tip_text", tipsToSplit[2], Field.Store.YES));
             //System.out.println("resultSet3  " + tipsToSplit[0] + tipsToSplit[1] );
         }
         //Adds a document to this index, aka indexWriter.

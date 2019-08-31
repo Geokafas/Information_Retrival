@@ -35,7 +35,6 @@ public class StoreListViewCell extends ListCell<Store> {
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource("listCell.fxml"));
             fxmlLoader.setController(this);
-            //fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,7 +44,6 @@ public class StoreListViewCell extends ListCell<Store> {
     @Override
     protected void updateItem(Store store, boolean b) {
         super.updateItem(store, b);
-        System.out.println("I am Called");
         if(b || store == null) {
 
             setText(null);
@@ -55,10 +53,6 @@ public class StoreListViewCell extends ListCell<Store> {
             if (fxmlLoader == null) {
                 loadFXML();
             }
-//            cellTitle = new JFXTextField();
-//            cellReviewText = new JFXTextArea();
-//            cellTipText = new JFXTextArea();
-//            cell = new VBox();
 
             cellTitle.setText(store.getStoreName());
             cellReviewText.setText(store.getStoreReview());

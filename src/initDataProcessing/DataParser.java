@@ -11,7 +11,12 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class DataParser {
-
+    /**
+     * Reads from the raw yelp json files and exports the review, tips, and business fields
+     * int .txt and into the XAMPP db
+     *
+     * @param city, the target city to index business from (hard coded)
+     */
 	private static JSONParser parser = new JSONParser();
 	private static JSONObject jsonObject;
 

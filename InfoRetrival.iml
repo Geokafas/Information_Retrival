@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="json-20180813" level="project" />
     <orderEntry type="library" exported="" name="json-simple-2.1.2" level="project" />
-    <orderEntry type="library" exported="" name="lucene-core-8.0.0" level="project" />
-    <orderEntry type="library" exported="" name="analyzers-common" level="project" />
-    <orderEntry type="library" exported="" name="queryparser" level="project" />
-    <orderEntry type="library" exported="" name="analysis" level="project" />
-    <orderEntry type="library" exported="" name="lucene-queries-8.0.0" level="project" />
+    <orderEntry type="library" exported="" name="lucene-core-8.0.0" level="application" />
+    <orderEntry type="library" name="queryparser" level="project" />
     <orderEntry type="library" exported="" name="mysql-connector-java-8.0" level="project" />
     <orderEntry type="library" exported="" name="javafx-swt" level="project" />
     <orderEntry type="module-library">
@@ -25,6 +22,8 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="org.apache.lucene:lucene-analyzers-common:8.1.1" level="project" />
+    <orderEntry type="library" exported="" name="lucene-highlighter-8.0.0" level="project" />
+    <orderEntry type="library" exported="" name="lucene-queries-8.0.0" level="project" />
+    <orderEntry type="library" name="lucene-memory-8.0.0" level="project" />
   </component>
 </module>

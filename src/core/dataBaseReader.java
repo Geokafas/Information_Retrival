@@ -7,6 +7,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+/**
+ * Reads data from XAMPP and uses lucene to index them
+ * access through XAMPP localhost
+ * so XAMPP must be running
+ */
+
 public class dataBaseReader{
     private static Connection connect = null;
     private static Statement statement1;
@@ -20,18 +26,26 @@ public class dataBaseReader{
     final private static String host = "localhost";
     final private static String user = "root";
     final private static String passwd = "";
-    private static  String tableName="";
-    private static luceneIndexer fac;
+    private static luceneIndexer indexer;
     private static ArrayList<String> businessTolucene;
     private static ArrayList<String> reviewsTolucene;
     private static ArrayList<String> tipsTolucene;
 
 
+    public static void getBusinessDetails(ResultSet resultSet)  throws java.sql.SQLException{
+        businessTolucene = new ArrayList<>();
+        while(resultSet.next()){
+            businessTolucene.add(resultSet1.getString("business_id")
+                    +"\t"+resultSet1.getString("name")
+                    +"\t"+resultSet1.getString("stars")
+                    +"\t"+resultSet1.getString("categories")
+                    +"\t"+resultSet1.getString("review_count"));
+        }
 
+    }
 
 
     public static void readDataBase() throws NullPointerException, IOException {
-        ArrayList<BusinessDetails> array;
         resultSet1 = null;
         resultSet2 = null;
         resultSet3 = null;
@@ -42,8 +56,8 @@ public class dataBaseReader{
         reviewsTolucene = new ArrayList<>();
         tipsTolucene = new ArrayList<>();
 
-        fac = new luceneIndexer();
-        fac.initialize();
+        indexer = new luceneIndexer();
+        indexer.initialize();
         try {
             // This will load the MySQL driver, each DB has its own driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -59,12 +73,12 @@ public class dataBaseReader{
             statement1 = connect.createStatement();
 
             resultSet1 = statement1.executeQuery("select * from business");
-            array = getBusinessDetails(resultSet1);
-            System.out.println(array.size());
+            getBusinessDetails(resultSet1);
+            //System.out.println(array.size());
 
-           for(int i=0; i< array.size(); i++){
+            for(String biz : businessTolucene){
 
-               String id = array.get(i).toString();
+               String[] id = biz.split("\t");
                //clean arrays before assigning. Because the
                // same array is used to send data for each different business to lucene
                reviewsTolucene.clear();
@@ -72,49 +86,28 @@ public class dataBaseReader{
 
                //System.out.println(id);
                statement2 = connect.createStatement();
-               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id+"'");
+               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id[0]+"'");
                while(resultSet2.next()){
-                   reviewsTolucene.add(resultSet2.getString("stars")
+                   reviewsTolucene.add(resultSet2.getString("business_id")
+                           +"\t"+resultSet2.getString("stars")
                            +"\t"+resultSet2.getString("review_text"));
 
                }
                statement3 = connect.createStatement();
-               resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id+"'");
+               resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id[0]+"'");
                while(resultSet3.next()){
-                   tipsTolucene.add(resultSet3.getString("date")
+                   tipsTolucene.add(resultSet3.getString("business_id")
+                           +"\t"+resultSet3.getString("date")
                            +"\t"+resultSet3.getString("tip_text"));
                }
-               fac.addFileToIndex(businessTolucene.get(i),reviewsTolucene,tipsTolucene);
+               indexer.addFileToIndex(biz,reviewsTolucene,tipsTolucene);
            }
-           fac.terminate();
+           indexer.terminate();
         //There was a problem connecting to the database
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public static ArrayList<BusinessDetails> getBusinessDetails(ResultSet resultSet)  throws java.sql.SQLException{
-        ArrayList<BusinessDetails> business_array;
-        businessTolucene = new ArrayList<>();
-        business_array = new ArrayList<>();
-        BusinessDetails b;
-        while(resultSet.next()){
-            businessTolucene.add(resultSet1.getString("business_id")
-                    +"\t"+resultSet1.getString("name")
-                    +"\t"+resultSet1.getString("stars")
-                    +"\t"+resultSet1.getString("categories")
-                    +"\t"+resultSet1.getString("review_count"));
-            b = new BusinessDetails(resultSet.getString("business_id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("stars"),
-                    resultSet.getString("categories"),
-                    resultSet.getString("review_count"));
-            business_array.add(b);
-        }
-        return business_array;
-
-    }
-
    public static void main(String[] args) throws NullPointerException,java.io.IOException {
         //TODO prin treksw thn readDB prepei na tsekarw to fakelo luceneResults. An den einai adeios prepei na ton adiasw gt meta tha m efanizei diplwtupa apotelesmata sta queries mou
         readDataBase();
@@ -154,30 +147,6 @@ public class dataBaseReader{
             e.printStackTrace();
         }
     }
-}
-//currently not fully used
-class BusinessDetails{
-    private String id;
-    private String name;
-    private String stars;
-    private String categories;
-    private String review_counter;
-
-
-    public BusinessDetails(String id, String name, String stars, String categories, String review_counter){
-        this.id = id;
-        this.name = name;
-        this.stars = stars;
-        this.categories = categories;
-        this.review_counter = review_counter;
-
-    }
-    public String toString(){
-        return id;
-
-    }
-
-
 }
 
 
