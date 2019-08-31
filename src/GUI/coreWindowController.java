@@ -106,7 +106,7 @@ public class coreWindowController {
     }
 
     private ArrayList<Store> createList(List<Document> docs){
-        ArrayList<Store> stores = new ArrayList<Store>();
+        ArrayList<Store> stores = new ArrayList<>();
         for(int i=0; i<docs.size(); i++) {
             Document d = docs.get(i);
             String name = d.get("name");

@@ -109,7 +109,7 @@ public class luceneIndexer {
                     new StringField("review_stars", reviewsToSplit[1], Field.Store.YES));
             document.add(
                     new TextField("review_text", reviewsToSplit[2], Field.Store.YES));
-            System.out.println("resultSet2  "+"\t"+ reviewsToSplit[0] +"\t"+ reviewsToSplit[1]);
+            //System.out.println("resultSet2  "+"\t"+ reviewsToSplit[0] +"\t"+ reviewsToSplit[1]);
         }
 
         for(String  i : resultSet3) {

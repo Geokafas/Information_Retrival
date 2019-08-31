@@ -86,7 +86,7 @@ public class dataBaseReader{
 
                //System.out.println(id);
                statement2 = connect.createStatement();
-               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'"+id[0]+"'");
+               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'" + id[0] + "'");
                while(resultSet2.next()){
                    reviewsTolucene.add(resultSet2.getString("business_id")
                            +"\t"+resultSet2.getString("stars")

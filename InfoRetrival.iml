@@ -7,12 +7,11 @@
     </content>
     <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="json-20180813" level="project" />
-    <orderEntry type="library" exported="" name="json-simple-2.1.2" level="project" />
-    <orderEntry type="library" exported="" name="lucene-core-8.0.0" level="application" />
+    <orderEntry type="library" name="json-simple-2.1.2" level="project" />
+    <orderEntry type="library" name="lucene-core-8.0.0" level="application" />
     <orderEntry type="library" name="queryparser" level="project" />
-    <orderEntry type="library" exported="" name="mysql-connector-java-8.0" level="project" />
-    <orderEntry type="library" exported="" name="javafx-swt" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-8.0" level="project" />
+    <orderEntry type="library" name="javafx-swt" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -22,8 +21,8 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="lucene-highlighter-8.0.0" level="project" />
-    <orderEntry type="library" exported="" name="lucene-queries-8.0.0" level="project" />
+    <orderEntry type="library" name="lucene-highlighter-8.0.0" level="project" />
+    <orderEntry type="library" name="lucene-queries-8.0.0" level="project" />
     <orderEntry type="library" name="lucene-memory-8.0.0" level="project" />
   </component>
 </module>

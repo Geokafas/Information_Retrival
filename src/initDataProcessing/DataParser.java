@@ -33,7 +33,8 @@ public class DataParser {
     private static fileFactory factory;
     private static writeToDataBase com;
 
-	
+	//TODO na svhsw to file factory teleiws.. den douleuw me arxeia
+
 	public static void main(String[] args) throws IOException,Exception{
     	try {
     		String city = "Mentor-on-the-Lake";
