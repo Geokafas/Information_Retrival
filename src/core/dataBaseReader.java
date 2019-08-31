@@ -79,6 +79,7 @@ public class dataBaseReader{
             for(String biz : businessTolucene){
 
                String[] id = biz.split("\t");
+                System.out.println("biz id: " + id[0]);
                //clean arrays before assigning. Because the
                // same array is used to send data for each different business to lucene
                reviewsTolucene.clear();
@@ -86,20 +87,22 @@ public class dataBaseReader{
 
                //System.out.println(id);
                statement2 = connect.createStatement();
-               resultSet2 = statement2.executeQuery("select * from reviews WHERE business_id = "+ "'" + id[0] + "'");
+               resultSet2 = statement2.executeQuery("select * from `reviews` WHERE `business_id` = "+ "'" + id[0] + "'");
                while(resultSet2.next()){
                    reviewsTolucene.add(resultSet2.getString("business_id")
                            +"\t"+resultSet2.getString("stars")
                            +"\t"+resultSet2.getString("review_text"));
 
                }
+               System.out.println("reviews: \n" + reviewsTolucene);
                statement3 = connect.createStatement();
-               resultSet3 = statement3.executeQuery("select * from tips WHERE business_id = "+ "'"+id[0]+"'");
+               resultSet3 = statement3.executeQuery("select * from `tips` WHERE `business_id` = "+ "'"+id[0]+"'");
                while(resultSet3.next()){
                    tipsTolucene.add(resultSet3.getString("business_id")
                            +"\t"+resultSet3.getString("date")
                            +"\t"+resultSet3.getString("tip_text"));
                }
+                System.out.println("tips: \n" + tipsTolucene);
                indexer.addFileToIndex(biz,reviewsTolucene,tipsTolucene);
            }
            indexer.terminate();

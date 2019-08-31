@@ -43,7 +43,6 @@ public class luceneSearchEngine {
     private void makeSearchAnalyzer(){
         this.analyzer = new StandardAnalyzer();
     }
-    //private Map<String, Analyzer> analyzerMap = new HashMap<>();
 
     public List<Document> search(ArrayList<String> inField, String intitialQueryString) throws java.io.IOException, org.apache.lucene.queryparser.classic.ParseException
     {
@@ -89,14 +88,14 @@ public class luceneSearchEngine {
         for(Map.Entry<String, String[]> f : fragments.entrySet())
         {
             for (String text : f.getValue()) {
-                //System.out.println("!!!THIS IS HIGHLIGHTED:  " + text);
+                System.out.println("!!!THIS IS HIGHLIGHTED:  " + text);
             }
         }
         System.out.println("!This is the query:     " + query + " ");
         //this is an array of documents that resulted from the search process
         //like this SoreDoc[] hits = topDocs.scoreDocs;
         //and i map it to a List<>
-        return Arrays.stream(topDocs.scoreDocs).map(scoreDoc -> {
+        final List<Document> collect = Arrays.stream(topDocs.scoreDocs).map(scoreDoc -> {
             try {
                 //this is a document from the top scoring hits
                 return searcher.doc(scoreDoc.doc); //scoreDoc.doc is the id of the document
@@ -105,6 +104,8 @@ public class luceneSearchEngine {
             }
             return null;
         }).collect(Collectors.toList());
+
+        return collect;
     }
 
 

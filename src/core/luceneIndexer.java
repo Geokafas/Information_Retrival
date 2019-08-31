@@ -88,7 +88,7 @@ public class luceneIndexer {
 //komple
 
         businessToSplit = resultSet1.split("\t");
-        System.out.println("FOR ID:  " + businessToSplit[0]);
+        //System.out.println("FOR ID:  " + businessToSplit[0]);
         document.add(
                 new StringField("business_id", businessToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
         document.add(
