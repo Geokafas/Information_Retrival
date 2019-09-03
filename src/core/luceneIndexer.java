@@ -48,18 +48,18 @@ The Lucene query language allows the user to specify which field(s) to search on
 
 */
 
+import models.Review;
+import models.Store;
+import models.Tip;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.document.Document;
-
 import java.io.IOException;
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
 
 public class luceneIndexer {
@@ -77,50 +77,41 @@ public class luceneIndexer {
         indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
     }
 
-    public void addFileToIndex(String resultSet1, ArrayList<String> resultSet2, ArrayList<String> resultSet3)
+    public void addFileToIndex(Store resultSet1, ArrayList<Review> resultSet2, ArrayList<Tip> resultSet3)
             throws java.io.IOException, NullPointerException {
-
-
         Document document = new Document();
-        String[] businessToSplit;
-        String[] reviewsToSplit;
-        String[] tipsToSplit;
-//komple
 
-        businessToSplit = resultSet1.split("\t");
-        //System.out.println("FOR ID:  " + businessToSplit[0]);
         document.add(
-                new StringField("business_id", businessToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
+                new StringField("business_id", resultSet1.getBusiness_id(), Field.Store.YES));//use textfield for content i want to be tokenized
         document.add(
-                new TextField("name", businessToSplit[1], Field.Store.YES));//use textfield for content i want to be tokenized
+                new TextField("name", resultSet1.getStoreName(), Field.Store.YES));//use textfield for content i want to be tokenized
         document.add(
-                new StringField("stars", businessToSplit[2], Field.Store.YES)); //use StringField for content i dont want to be tokenized
+                new StringField("stars", String.valueOf(resultSet1.getStoreStars()), Field.Store.YES)); //use StringField for content i dont want to be tokenized
         document.add(
-                new TextField("categories", businessToSplit[3], Field.Store.YES));
+                new TextField("categories", resultSet1.getCategories(), Field.Store.YES));
         document.add(
-                new StringField("review_count", businessToSplit[4], Field.Store.YES));
-        //System.out.println("resultSet1  " + businessToSplit[0] + businessToSplit[1] + businessToSplit[2] + businessToSplit[3] + businessToSplit[4]);
+                new StringField("review_count", String.valueOf(resultSet1.getReview_count()), Field.Store.YES));
 
-        for(String  i : resultSet2) {
-            reviewsToSplit = i.split("\t");
+        for(Review  i : resultSet2) {
             document.add(
-                    new StringField("business_id", reviewsToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
+                    new StringField("business_id", i.getBusiness_id(), Field.Store.YES));//use textfield for content i want to be tokenized
             document.add(
-                    new StringField("review_stars", reviewsToSplit[1], Field.Store.YES));
+                    new StringField("review_stars", String.valueOf(i.getStarts()), Field.Store.YES));
             document.add(
-                    new TextField("review_text", reviewsToSplit[2], Field.Store.YES));
-            //System.out.println("resultSet2  "+"\t"+ reviewsToSplit[0] +"\t"+ reviewsToSplit[1]);
+                    new TextField("review_text", i.getReviewText(), Field.Store.YES));
+            document.add(
+                    new StringField("review_id", String.valueOf(i.getReview_id()), Field.Store.YES));
         }
 
-        for(String  i : resultSet3) {
-            tipsToSplit = i.split("\t");
+        for(Tip  i : resultSet3) {
             document.add(
-                    new StringField("business_id", tipsToSplit[0], Field.Store.YES));//use textfield for content i want to be tokenized
+                    new StringField("business_id", i.getBusiness_id(), Field.Store.YES));//use textfield for content i want to be tokenized
             document.add(
-                    new StringField("date", tipsToSplit[1], Field.Store.YES));
+                    new StringField("date", i.getDate(), Field.Store.YES));
             document.add(
-                    new TextField("tip_text", tipsToSplit[2], Field.Store.YES));
-            //System.out.println("resultSet3  " + tipsToSplit[0] + tipsToSplit[1] );
+                    new TextField("tip_text", i.getText(), Field.Store.YES));
+            document.add(
+                    new StringField("tip_id", String.valueOf(i.getTip_id()), Field.Store.YES));
         }
         //Adds a document to this index, aka indexWriter.
         indexWriter.addDocument(document);

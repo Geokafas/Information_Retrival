@@ -1,4 +1,4 @@
-package GUI;
+package models;
 
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -6,11 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
+import models.Form;
 
-import javax.swing.*;
 import java.io.IOException;
 
-public class StoreListViewCell extends ListCell<Store> {
+public class StoreListViewCell extends ListCell<Form> {
 
     @FXML
     private JFXTextField cellTitle;
@@ -42,9 +42,9 @@ public class StoreListViewCell extends ListCell<Store> {
     }
 
     @Override
-    protected void updateItem(Store store, boolean b) {
-        super.updateItem(store, b);
-        if(b || store == null) {
+    protected void updateItem(Form form, boolean b) {
+        super.updateItem(form, b);
+        if(b || form == null) {
 
             setText(null);
             setGraphic(null);
@@ -54,9 +54,9 @@ public class StoreListViewCell extends ListCell<Store> {
                 loadFXML();
             }
 
-            cellTitle.setText(store.getStoreName());
-            cellReviewText.setText(store.getStoreReview());
-            cellTipText.setText(store.getStoreTip());
+            cellTitle.setText(form.getStore().getStoreName());
+            cellReviewText.setText(form.getBoldText());
+            cellTipText.setText(form.getBoldText());
 
             setText(null);
             setGraphic(cell);

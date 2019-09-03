@@ -7,16 +7,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
-import org.apache.lucene.document.Document;
+import models.Form;
+import models.StoreListViewCell;
 import org.apache.lucene.index.IndexReader;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
 public class coreWindowController {
@@ -29,9 +26,9 @@ public class coreWindowController {
     private JFXTextField searchField;
 
     @FXML
-    private ListView<Store> searchView;
+    private ListView<Form> searchView;
 
-    private ObservableList<Store> storeObservableList;
+    private ObservableList<Form> storeObservableList;
 
     private static String searchTerms;
 
@@ -39,7 +36,7 @@ public class coreWindowController {
 
     //auth kaleitai apo to FXML arxeio sthn onAction
     @FXML
-    protected void searchActionHandler(ActionEvent event) throws IOException
+    protected void searchActionHandler(ActionEvent event)
     {
         ArrayList<String> searchFields = new ArrayList<String>();
         //TODO den douleuei opws perimena isws prepei na ginei boolen query. Na valw kai mia special anazhthsh pou tha psaxnei sto kathena 3exwrista
@@ -61,7 +58,7 @@ public class coreWindowController {
 
 
     //TODO na valw asterakia san eikonidio aristera kai na taxinomo me vash ta stars. Alla tha prepei na alla3w to ObservableList se kt allo.
-    private void populateSearchResultsListView(List<Document> docs) {
+    private void populateSearchResultsListView(List<Form> docs) {
         //to obervableList kapws sundeete me to listview kai mporw na ftiaxnw ena tetio antikeimeno kai na to kanw set sto serchView list
 
         if (!searchView.getItems().isEmpty()) {
@@ -69,30 +66,20 @@ public class coreWindowController {
         }
 
         storeObservableList = FXCollections.observableArrayList();
-        storeObservableList.addAll(createList(docs));
+        storeObservableList.addAll(docs);
 
         searchView.setItems(storeObservableList);
         searchView.setCellFactory(storeListView -> new StoreListViewCell());
     }
 
-
-    //TODO prepei h anazhthsh na sundiazei ta queries ama einai panw apo ena
-    //TODO na se allo packet
     private void luceneSearch(ArrayList<String> inField, String searchTerms) {
         ExecutorService executor = Executors.newCachedThreadPool();
-
         //called from a different thread so the system wont be unresponsive
-        Future<List<Document>> future = executor.submit(new Callable<List<Document>>() {
+        Future<List<Form>> future = executor.submit(new Callable<List<Form>>() {
             @Override
-            public List<Document> call() throws Exception {
+            public List<Form> call() throws Exception {
 
-                //System.out.println("mphka");
-                List<Document> docs = lucene.search(inField,searchTerms);
-                for(int i=0; i<docs.size();++i)
-                {
-                    //System.out.println(docs.get(i).get("name"));
-                    //System.out.println(docs.get(i).get("review_text"));
-                }
+                List<Form> docs = lucene.search(inField,searchTerms);
                 return docs;
             }
         });
@@ -103,20 +90,6 @@ public class coreWindowController {
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
         }
-    }
-
-    private ArrayList<Store> createList(List<Document> docs){
-        ArrayList<Store> stores = new ArrayList<>();
-        for(int i=0; i<docs.size(); i++) {
-            Document d = docs.get(i);
-            String name = d.get("name");
-            int stars = Integer.valueOf(d.get("stars"));
-            String review_text = d.get("review_text");
-            String tip_text = d.get("tip_text");
-            System.out.println("Name: " + name + " stars: " + stars);
-            stores.add(new Store(name,review_text,tip_text,stars));
-        }
-        return stores;
     }
 
     private void cleanListView() {
