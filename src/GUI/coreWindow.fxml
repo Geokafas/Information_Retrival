@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="main_anchore" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="1053.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.coreWindowController">
+   <children>
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="1053.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <StackPane fx:id="stackedPane" SplitPane.resizableWithParent="false">
+               <children>
+                  <TabPane fx:id="storeDetailPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Info">
+                          <content>
+                            <AnchorPane fx:id="infotabPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField fx:id="cellTitle" editable="false" promptText="tetitle" text="sdsd" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                      <Tab text="Reviews">
+                        <content>
+                          <AnchorPane fx:id="reviewsTabPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextArea fx:id="cellReviewText" editable="false" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Tips">
+                        <content>
+                          <AnchorPane fx:id="tipsTabPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextArea fx:id="cellTipText" editable="false" prefHeight="64.0" prefWidth="1013.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                  <ListView fx:id="searchView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="477.0" prefWidth="902.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </ListView>
+               </children>
+            </StackPane>
+         </center>
+         <top>
+            <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="118.0" prefWidth="1053.0" style="-fx-background-color: #778899;" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox id="search_searchbtn_Hbox" prefHeight="120.0" prefWidth="1138.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <AnchorPane id="search_anchorPane">
+                           <children>
+                              <JFXTextField id="search_textField" fx:id="searchField" cache="true" layoutX="14.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="670.0" promptText="search terms" styleClass="search-field" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="28.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="TEXT" />
+                                 </cursor>
+                                 <effect>
+                                    <Glow />
+                                 </effect>
+                              </JFXTextField>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="searchBTN_anchorPane" prefHeight="120.0" prefWidth="202.0">
+                           <children>
+                              <JFXButton id="search_btn" fx:id="search_btn" layoutX="31.0" layoutY="35.0" mnemonicParsing="false" onAction="#searchActionHandler" prefHeight="50.0" prefWidth="99.0" styleClass="round-red" text="search" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="35.0">
+                                 <font>
+                                    <Font name="Calibri Bold Italic" size="18.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXCheckBox fx:id="doBoolQuery" layoutY="97.0" onAction="#searchActionHandler" text="boolean" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="120.0" prefWidth="166.0">
+                           <children>
+                              <JFXButton fx:id="backToSearch" buttonType="RAISED" layoutX="54.0" layoutY="48.0" onAction="#searchActionHandler" styleClass="round-red" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

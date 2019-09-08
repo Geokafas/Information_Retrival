@@ -15,7 +15,7 @@ public class Tip {
         this.date = date;
     }
 
-    public String getText(){
+    public String getTipText(){
         return text;
     }
 

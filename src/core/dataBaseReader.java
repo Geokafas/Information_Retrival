@@ -69,15 +69,14 @@ public class dataBaseReader{
             for(Store biz : businessTolucene){
 
                 String id = biz.getBusiness_id();
-                System.out.println("biz id: " + id);
+                //System.out.println("biz id: " + id);
                 //clean arrays before assigning. Because the
                 // same array is used to send data for each different business to lucene
-                reviewsTolucene.clear();
-                tipsTolucene.clear();
+
 
                 //System.out.println(id);
                 statement2 = connect.createStatement();
-                resultSet2 = statement2.executeQuery("select * from `reviews` WHERE `business_id` = "+ "'" + id + "'");
+                resultSet2 = statement2.executeQuery("select * from `reviews` WHERE `business_id` = "+ "'" + id + "'"+"ORDER BY `stars` DESC");
                 long review_counter = 0;
                 while(resultSet2.next()){
                     reviewsTolucene.add( new Review(resultSet2.getString("review_text"),
@@ -85,7 +84,7 @@ public class dataBaseReader{
                             resultSet2.getString("business_id"),
                             Integer.parseInt(resultSet2.getString("stars"))));
                 }
-                System.out.println("reviews: \n" + reviewsTolucene);
+                //System.out.println("reviews: \n" + reviewsTolucene);
                 statement3 = connect.createStatement();
                 resultSet3 = statement3.executeQuery("select * from `tips` WHERE `business_id` = "+ "'"+id+"'");
                 long tip_counter = 0;
@@ -158,7 +157,7 @@ public class dataBaseReader{
                tipsTolucene.clear();
 
                statement2 = connect.createStatement();
-               resultSet2 = statement2.executeQuery("select * from `reviews` WHERE `business_id` = "+ "'" + id + "'");
+               resultSet2 = statement2.executeQuery("select * from `reviews` WHERE `business_id` = "+ "'" + id + "'"+ " ORDER BY `stars` DESC");
                while(resultSet2.next()){
                    reviewsTolucene.add( new Review(resultSet2.getString("review_text"),
                            review_counter,
@@ -167,7 +166,7 @@ public class dataBaseReader{
                }
                //System.out.println("reviews: \n" + reviewsTolucene);
                statement3 = connect.createStatement();
-               resultSet3 = statement3.executeQuery("select * from `tips` WHERE `business_id` = "+ "'"+id+"'");
+               resultSet3 = statement3.executeQuery("select * from `tips` WHERE `business_id` = "+ "'"+id+"'"+ " ORDER BY `date` DESC");
                while(resultSet3.next()){
                    tipsTolucene.add( new Tip(resultSet3.getString("tip_text"),
                            tip_counter,

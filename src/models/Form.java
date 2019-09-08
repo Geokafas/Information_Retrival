@@ -1,21 +1,30 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Form {
-    private Review reviews;
-    private Tip tips;
+    private ArrayList<Review> reviews;
+    private ArrayList<Tip>  tips;
     private Store store;
     private String boldText;
 
-    public Form(Store st, String boldText){
+    public Form(Store st, String boldText, ArrayList<Review> reviews){
         this.store = st;
         this.boldText = boldText;
+        this.reviews = reviews;
     }
 
-    public Review getReviews(){
+    public Form(Store st, ArrayList<Review> reviews, ArrayList<Tip> tips){
+        this.store = st;
+        this.tips = tips;
+        this.reviews = reviews;
+    }
+
+    public ArrayList<Review> getReviews(){
         return reviews;
     }
 
-    public Tip getTips(){
+    public ArrayList<Tip> getTips(){
         return tips;
     }
 

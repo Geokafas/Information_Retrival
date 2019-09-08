@@ -3,19 +3,11 @@ package GUI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.Screen;
-
-import javafx.scene.Cursor;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.stage.StageStyle;
-
-import java.io.IOException;
+import javafx.util.Duration;
 
 public class JFXyelper extends Application {
     private AnchorPane coreWindowLayout;
@@ -36,6 +28,7 @@ public class JFXyelper extends Application {
         primaryStage.setScene(new Scene(coreWindowLayout));
         primaryStage.show();
     }
+
 
     public static void main(String[] args)  {
         launch(args);

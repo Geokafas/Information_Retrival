@@ -64,7 +64,7 @@ import java.util.ArrayList;
 
 public class luceneIndexer {
     private StandardAnalyzer analyzer;
-    private String indexPath = "D:/documents/intellijProjects/luceneResults";
+    private String indexPath = "indexerOutput";
     private IndexWriterConfig indexWriterConfig;
     private Directory indexDirectory;
     private IndexWriter indexWriter;
@@ -109,7 +109,7 @@ public class luceneIndexer {
             document.add(
                     new StringField("date", i.getDate(), Field.Store.YES));
             document.add(
-                    new TextField("tip_text", i.getText(), Field.Store.YES));
+                    new TextField("tip_text", i.getTipText(), Field.Store.YES));
             document.add(
                     new StringField("tip_id", String.valueOf(i.getTip_id()), Field.Store.YES));
         }

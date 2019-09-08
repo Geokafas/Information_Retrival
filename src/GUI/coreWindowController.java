@@ -1,22 +1,29 @@
 package GUI;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import core.luceneSearchEngine;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import models.Form;
-import models.StoreListViewCell;
 import org.apache.lucene.index.IndexReader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class coreWindowController {
+public class coreWindowController{
     private luceneSearchEngine lucene = new luceneSearchEngine();
     private static IndexReader indexReader;
     @FXML
@@ -28,9 +35,35 @@ public class coreWindowController {
     @FXML
     private ListView<Form> searchView;
 
+    @FXML
+    private JFXCheckBox doBoolQuery;
+
+    @FXML
+    private StackPane stackedPane;
+
+    @FXML
+    private TabPane storeDetailPane;
+
+    @FXML
+    private JFXTextField cellTitle;
+
+    @FXML
+    private JFXTextArea cellReviewText;
+
+    @FXML
+    private JFXTextArea cellTipText;
+
+    @FXML
+    private JFXButton backToSearch ;
+
+
     private ObservableList<Form> storeObservableList;
 
     private static String searchTerms;
+
+    protected Node searchPage;
+    protected Node detailsPage;
+
 
     public coreWindowController(){}
 
@@ -43,7 +76,7 @@ public class coreWindowController {
         searchFields.add("name");
         searchFields.add("review_text");
         searchFields.add("tip_text");
-//        searchFields.add("categories");
+        searchFields.add("categories");
 
         if (event.getSource() == search_btn)
         {
@@ -53,6 +86,18 @@ public class coreWindowController {
 
             luceneSearch(searchFields, searchTerms);
             searchField.setText(""); //clear field
+        }
+
+        if(event.getSource()==doBoolQuery){
+            if (doBoolQuery.isSelected()){
+                setBooleanQueryView(true);
+            }else if (!doBoolQuery.isSelected()){
+                setBooleanQueryView(false);
+            }
+        }
+
+        if (event.getSource() == backToSearch) {
+            backToSearchPane();
         }
     }
 
@@ -68,9 +113,26 @@ public class coreWindowController {
         storeObservableList = FXCollections.observableArrayList();
         storeObservableList.addAll(docs);
 
+
+
         searchView.setItems(storeObservableList);
-        searchView.setCellFactory(storeListView -> new StoreListViewCell());
+
+        searchView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("clicked on " + searchView.getSelectionModel().getSelectedItem().getStore().getBusiness_id());
+                loadDetails(docs.get(0));
+                changePage();
+            }
+        });
+
+        searchView.setCellFactory(storeListView -> {
+            return new StoreListViewCardController();
+        });
+
     }
+
 
     private void luceneSearch(ArrayList<String> inField, String searchTerms) {
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -94,6 +156,38 @@ public class coreWindowController {
 
     private void cleanListView() {
         searchView.getItems().setAll();
+    }
+
+    private void setBooleanQueryView(boolean flag){
+        if(flag){
+            searchField.setText("name: categories: ");
+        }
+        else {
+            searchField.setText("");
+        }
+    }
+
+    public void changePage() {
+        searchPage = stackedPane.getChildren().get(1);
+        stackedPane.getChildren().remove(1);
+    }
+
+    public void backToSearchPane(){
+        detailsPage  = stackedPane.getChildren().get(0);
+        stackedPane.getChildren().set(0,detailsPage);
+        stackedPane.getChildren().add(1,searchPage);
+    }
+
+    public void loadDetails(Form form){
+        cellTitle.setText(form.getStore().getStoreName());
+        cellReviewText.setText(form.getReviews().get(0).getReviewText());
+        for(int i =1; i<form.getReviews().size(); i++) {
+            cellReviewText.appendText(form.getReviews().get(i).getReviewText());
+        }
+        cellReviewText.setText("tip text");
+//        for(int i =1; i<form.getTips().size(); i++) {
+//            cellReviewText.appendText(form.getTips().get(i).getTipText());
+//        }
     }
 
 }
